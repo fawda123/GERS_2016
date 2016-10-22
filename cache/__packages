@@ -1,2 +1,16 @@
 base
 knitr
+ggplot2
+dplyr
+gridExtra
+purrr
+tidyr
+lattice
+survival
+Formula
+Hmisc
+ggrepel
+lubridate
+RColorBrewer
+sp
+rgeos
