@@ -491,9 +491,35 @@ The estimate depends on the spatial context...
 \end{center}
 \end{frame}
 
-<<>>=
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+The algorithm was applied to entire estuaries with relevant data \\~\\
+\begin{columns}
+\begin{column}{0.3\textwidth}
+\emtxt{Boundaries}
+\begin{center}
+\includegraphics[width = \textwidth]{fig/tb_seg.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\emtxt{Depth}
+\begin{center}
+\includegraphics[width = \textwidth]{fig/tb_dem.png}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\emtxt{Seagrass}
+\begin{center}
+\includegraphics[width = \textwidth]{fig/tb_sgr.pdf}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+<<eval = T, echo = F, cache = T, message = F, results = 'hide'>>=
 # reset digits to default
 data(tb_light)
+data(tb_sats)
 data(tb_seg)
 data(sgbuff_2010_tb)
 
@@ -524,18 +550,32 @@ scl_vals <- scales::rescale(dat$z_c_all, to = scls)
 leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
+mytheme <- theme_bw() + 
+  theme(
+    plot.background = element_rect(fill='transparent', 
+      colour = NA),
+    panel.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.key = element_rect(fill = 'transparent', 
+      colour = NA),
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank(),
+    axis.ticks.length = unit(.1, "cm"), 
+    plot.margin = unit(c(1, 1, 1, 1), 'pt'), 
+    legend.position = 'top'
+  )   
+
 # map, z_cmed
 p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
-  theme_classic() +
   coord_equal() +
   scale_x_continuous(labels = fmt()) + 
-  xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
-  ylab('Latitude') +
   scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, 
     breaks = leg_brks, 
     labels = leg_labs) + 
@@ -543,28 +583,49 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) +
+  mytheme
 
-# p1leg <- g_legend(p1)
-p1 <- p1 + theme(#legend.position = 'none',
-  axis.line.x = element_line(), 
-  axis.line.y = element_line()
-  )
+pdf('fig/tb_zcmed.pdf', height = 5, width = 3.25, family = 'serif')
+p1
+dev.off()
 
-# boxplots by seg, z_cmed
-# reorder seg labels
-segs <- c('LTB', 'MTB', 'HB', 'OTB')
-dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
-  stat_summary(fun.y = o, geom = "point") + 
-  ylab(bquote(italic('Z' ['c, med']))) +
-  theme_classic() +
-  theme(axis.title.y = element_blank(),
-    axis.line.x = element_line(), 
-    axis.line.y = element_line()
-  ) + 
-  coord_flip()
+##
+# water clarity
+sats_melt <- reshape2::melt(tb_sats[['sats_all']], id.var = c('lat', 'lon'))
+
+# color ramp
+cols <- rev(c('blue', 'lightblue', 'yellow', 'brown'))
+
+# prep data
+to_plo <- sats_melt
+to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2006, 2010)))
+
+# leg lab
+leg_lab <- 'Clarity (m)'
+
+# get average only
+to_plo <- filter(to_plo, variable == 'Average')
+
+# make plot
+p2 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(aes(x = long, y = lat, group = group), 
+    colour = 'black', fill = NA) +
+  geom_tile(data = subset(to_plo, !is.na(value)), 
+    aes(x = lon, y = lat, fill = value, colour = value)
+  ) +
+  geom_polygon(aes(x = long, y = lat, group = group), 
+    colour = 'black', fill = NA) +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  scale_y_continuous(labels = fmt()) + 
+  scale_colour_gradientn(leg_lab, colours = cols) +
+  scale_fill_gradientn(leg_lab, colours = cols) +
+  mytheme
+
+pdf('fig/tb_sats.pdf', height = 5, width =3.25, family = 'serif')
+p2
+dev.off()
 
 # legend formatting, light requirements
 scls <- c(2, 9)
@@ -574,11 +635,10 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
 # map, light requirements
 p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = light), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
-  theme_classic() +
   coord_equal() +
   scale_x_continuous(labels = fmt()) + 
   xlab('Longitude') +
@@ -590,40 +650,323 @@ p3 <- ggplot(fortify(tb_seg), aes(long, lat)) +
     colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  mytheme
 
-p3leg <- g_legend(p3)
-p3 <- p3 + theme(legend.position = 'none',
-  axis.line.x = element_line(), 
-  axis.line.y = element_line()
-  )
-
-# boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
-  stat_summary(fun.y = o, geom = "point") +
-  ylab('% light requirements') +
-  theme_classic() +
-  theme(axis.title.y = element_blank(),
-    axis.line.x = element_line(), 
-    axis.line.y = element_line()
-    ) + 
-  coord_flip()
-
-pdf('figs/Fig8.pdf', height = 7.5, width = 7, family = 'serif')
-grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
-  widths = c(1, 0.3, 0.75))
+pdf('fig/tb_light.pdf', height = 5, width = 3.25, family = 'serif')
+p3
 dev.off()
 @
 
 %%%%%%
 \begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-Can we link depth estimates with water clarity to understand light requirements? 
-$\%SI = 100 \cdot \frac{I_{z}}{I_{o}} = exp\left(-K_d \cdot Z_{c,med}\right)$
+\onslide<1->
+Can we link depth estimates with water clarity to understand light requirements?
+\vspace{-0.2in}
+\begin{columns}[t]
+\footnotesize
+\begin{column}{0.3\textwidth}
+\onslide<1->
+\begin{center}
+\emtxt{Depth of colonization}
+\includegraphics[width = \textwidth]{fig/tb_zcmed.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.64\textwidth}
+\onslide<2->
+\vspace{0.2in}
+\begin{center}
+$\%SI = 100 \cdot \frac{I_{z}}{I_{o}} = exp\left(-K_d \cdot Z_{c,med}\right)$ \\~\\
+$I_z$: irradiance at depth \\
+$I_o$: irradiance at surface \\
+$K_d$: light extinction coefficient 
+\end{center}
+\begin{itemize}
+\item Percent surface irradiance at depth as a measure of seagrass light requirements \\~\\
+\item Can be used to characterize light regimes that maintain seagrass habitat
+\end{itemize}
+\end{column}
+\end{columns}
 \end{frame}
 
-% %%%%%%
-\begin{frame}{\textbf{Case 2: Seagrass and water quality}}{\textbf{Making the most of existing data}}
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\onslide<1->
+Can we link depth estimates with water clarity to understand light requirements?
+\vspace{-0.2in}
+\begin{columns}[t]
+\footnotesize
+\begin{column}{0.3\textwidth}
+\begin{center}
+\onslide<1->
+\emtxt{Depth of colonization}
+\includegraphics[width = \textwidth]{fig/tb_zcmed.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\begin{center}
+\onslide<1->
+\emtxt{Water clarity}
+\includegraphics[width = 0.97\textwidth, clip = true, trim = 0mm 0mm 0mm -3mm]{fig/tb_sats.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\begin{center}
+\onslide<2->
+\emtxt{Light requirements}
+\includegraphics[width = \textwidth]{fig/tb_light.pdf}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+% tb summ
+<<eval = T, echo = F, cache = T, message = F, results = 'hide'>>=
+data(tb_light)
+data(tb_seg)
+data(sgbuff_2010_tb)
+
+# mask tb doc and light ests by 1km buffer of seagrass
+coordinates(tb_light) = ~Longitude+Latitude
+tmp <- tb_light  %over% sgbuff_2010_tb %>% 
+  is.na(.) %>% 
+  !.
+tb_light <- data.frame(tb_light)[tmp, ]
+
+# centroids for labels
+labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
+labs$seg <- c('HB', 'LTB', 'MTB', 'OTB')
+
+mytheme <- theme_bw() + 
+  theme(
+    plot.background = element_rect(fill='transparent', 
+      colour = NA),
+    panel.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.key = element_rect(fill = 'transparent', 
+      colour = NA),
+    axis.ticks.length = unit(.1, "cm"), 
+    plot.margin = unit(c(1, 1, 1, 1), 'pt'), 
+    legend.position = 'right'
+  )   
+
+# format data, remove outliers
+dat <- data.frame(tb_light)
+
+# color ramp for all graphs
+pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
+fill_col <- pal(5)[3]
+
+# legend formatting, z_cmed
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat$z_c_all, to = scls)
+leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+
+# map, z_cmed
+p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = z_c_all), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  xlab('') +
+  scale_y_continuous(labels = fmt()) + 
+  ylab('') +
+  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, 
+    breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
+    colours = rev(pt_cols),
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend()) +
+  mytheme
+
+# boxplots by seg, z_cmed
+# reorder seg labels
+segs <- c('LTB', 'MTB', 'HB', 'OTB')
+dat$seg <- factor(dat$seg, levels = segs) 
+p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") + 
+  ylab(bquote(italic('Z' ['c, med']))) +
+  coord_flip() + 
+  mytheme +
+  theme(
+    axis.title.y = element_blank()
+    )
+# legend formatting, light requirements
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat$light, to = scls)
+leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+  
+# map, light requirements
+p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = light), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  xlab('') +
+  scale_y_continuous(labels = fmt()) + 
+  ylab('') +
+  scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = '% SI', 
+    colours = pt_cols,
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend()) +
+  mytheme
+
+# boxplots, light requirements
+p4 <- ggplot(dat, aes(x = seg, y = light)) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
+  ylab('% SI') +
+  coord_flip() + 
+  mytheme +
+  theme(
+    axis.title.y = element_blank()
+    )
+
+pdf('fig/tb_summ.pdf', height = 5, width = 13, family = 'serif')
+grid.arrange(p1, p2, p3, p4, ncol = 4, nrow = 1, 
+  widths = c(1, 0.35, 1, 0.35))
+dev.off()
+@
+
+% irl summ
+<<eval = T, echo = F, cache = T, message = F, results = 'hide'>>=
+data(irl_light)
+data(irl_seg)
+
+# centroids for labels, offset
+labs <- data.frame(rgeos::gCentroid(irl_seg, byid = T, id = irl_seg$seg))
+labs$x <- labs$x - 0.3
+labs$seg <- rownames(labs)
+labs <- labs[!labs$seg %in% c('LSL', 'LHR'), ]
+
+# format data, remove outliers
+dat <- data.frame(irl_light)
+
+# color ramp for all graphs
+pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
+fill_col <- pal(5)[3]
+
+# legend formatting, z_cmed
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat$z_c_all, to = scls)
+leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+
+mytheme <- theme_bw() + 
+  theme(
+    plot.background = element_rect(fill='transparent', 
+      colour = NA),
+    panel.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.key = element_rect(fill = 'transparent', 
+      colour = NA),
+    axis.ticks.length = unit(.1, "cm"), 
+    plot.margin = unit(c(1, 1, 1, 1), 'pt'), 
+    legend.position = 'right'
+  )   
+
+# map, z_cmed
+p1 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = z_c_all), size = 3, fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  coord_equal() +
+  scale_x_continuous(limits = c(-81.3, -80)) + 
+  xlab('') +
+  scale_y_continuous() + 
+  ylab('') +
+  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
+    colours = rev(pt_cols),
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend()) +
+  mytheme
+
+# boxplots by seg, z_cmed
+# reorder seg labels
+segs <- c('LSL', 'LIRL', 'LCIRL', 'UCIRL', 'BR', 'UIRL', 'LML', 'UML')
+dat$seg <- factor(dat$seg, levels = segs) 
+p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") + 
+  ylab(bquote(italic('Z' ['c, med']))) +
+  coord_flip() +
+  mytheme + 
+  theme(axis.title.y = element_blank())
+  
+# legend formatting, light requirements
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat$light, to = scls)
+leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+  
+# map, light requirements
+p3 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = light), size = 3, fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  coord_equal() +
+  scale_x_continuous(limits = c(-81.3, -80)) + 
+  xlab('') +
+  scale_y_continuous() + 
+  ylab('') +
+  scale_size(name = '% SI', range = scls, breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = '% SI', 
+    colours = pt_cols,
+    breaks = leg_brks, 
+    labels = leg_labs
+    ) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  mytheme
+
+# boxplots, light requirements
+p4 <- ggplot(dat, aes(x = seg, y = light)) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
+  ylab('% SI') +
+  coord_flip() + 
+  mytheme + 
+  theme(axis.title.y = element_blank())
+  
+
+pdf('fig/irl_summ.pdf', height = 4, width = 10, family = 'serif')
+grid.arrange(p1, p2, p3, p4, ncol = 4, nrow = 1, 
+  widths = c(1, 0.45, 1, 0.45))
+dev.off()
+@
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+Tampa Bay summary:\\~\\
+\includegraphics[width = \textwidth]{fig/tb_summ.pdf}
+Indian River Lagoon summary: \\~\\
+\includegraphics[width = \textwidth]{fig/irl_summ.pdf}
+\end{frame}
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
 \onslide<+->
 Benefits of the approach: \\~\\
 \begin{itemize}

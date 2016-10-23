@@ -297,17 +297,109 @@ The estimate depends on the spatial context...
 
 %%%%%%
 \begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-Applied to four coastal segments
+The algorithm was applied to entire estuaries with relevant data \\~\\
+\begin{columns}
+\begin{column}{0.3\textwidth}
+\emtxt{Boundaries}
+\begin{center}
+\includegraphics[width = \textwidth]{fig/tb_seg.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\emtxt{Depth}
+\begin{center}
+\includegraphics[width = \textwidth]{fig/tb_dem.png}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\emtxt{Seagrass}
+\begin{center}
+\includegraphics[width = \textwidth]{fig/tb_sgr.pdf}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\onslide<1->
+Can we link depth estimates with water clarity to understand light requirements?
+\vspace{-0.2in}
+\begin{columns}[t]
+\footnotesize
+\begin{column}{0.3\textwidth}
+\onslide<1->
+\begin{center}
+\emtxt{Depth of colonization}
+\includegraphics[width = \textwidth]{fig/tb_zcmed.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.64\textwidth}
+\onslide<2->
+\vspace{0.2in}
+\begin{center}
+$\%SI = 100 \cdot \frac{I_{z}}{I_{o}} = exp\left(-K_d \cdot Z_{c,med}\right)$ \\~\\
+$I_z$: irradiance at depth \\
+$I_o$: irradiance at surface \\
+$K_d$: light extinction coefficient 
+\end{center}
+\begin{itemize}
+\item Percent surface irradiance at depth as a measure of seagrass light requirements \\~\\
+\item Can be used to characterize light regimes that maintain seagrass habitat
+\end{itemize}
+\end{column}
+\end{columns}
 \end{frame}
 
 %%%%%%
 \begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-Can we link depth estimates with water clarity to understand light requirements? 
-$\%SI = 100 \cdot \frac{I_{z}}{I_{o}} = exp\left(-K_d \cdot Z_{c,med}\right)$
+\onslide<1->
+Can we link depth estimates with water clarity to understand light requirements?
+\vspace{-0.2in}
+\begin{columns}[t]
+\footnotesize
+\begin{column}{0.3\textwidth}
+\begin{center}
+\onslide<1->
+\emtxt{Depth of colonization}
+\includegraphics[width = \textwidth]{fig/tb_zcmed.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\begin{center}
+\onslide<1->
+\emtxt{Water clarity}
+\includegraphics[width = 0.97\textwidth, clip = true, trim = 0mm 0mm 0mm -3mm]{fig/tb_sats.pdf}
+\end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\begin{center}
+\onslide<2->
+\emtxt{Light requirements}
+\includegraphics[width = \textwidth]{fig/tb_light.pdf}
+\end{center}
+\end{column}
+\end{columns}
 \end{frame}
 
-% %%%%%%
-\begin{frame}{\textbf{Case 2: Seagrass and water quality}}{\textbf{Making the most of existing data}}
+% tb summ
+
+
+% irl summ
+
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+Tampa Bay summary:\\~\\
+\includegraphics[width = \textwidth]{fig/tb_summ.pdf}
+Indian River Lagoon summary: \\~\\
+\includegraphics[width = \textwidth]{fig/irl_summ.pdf}
+\end{frame}
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
 \onslide<+->
 Benefits of the approach: \\~\\
 \begin{itemize}
