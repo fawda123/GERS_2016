@@ -154,8 +154,8 @@ Seagrasses are sentinels of water quality {\tiny \cite{Duarte95,Short96}}
 The maximum depth of colonization is a useful proxy of eutrophication {\tiny \cite{Kenworthy96,Choice14}} \\~\\
 Often used as a basis for establishing nutrient criteria {\tiny \cite{Steward07}}\\~\\
 \onslide<+->
-\emtxt{Problem 1:} No consensus on the best way to measure depth of colonization \\~\\
-\emtxt{Problem 2:} Plenty of data are available but standardized techniques have not been developed \\~\\
+\emtxt{Problem 1:} Lots of methods have been used, lack of comparability\\~\\
+\emtxt{Problem 2:} Large scale inferences require common approaches \\~\\
 \onslide<+->
 \begin{block}{Study objective}
 Develop and apply an algorithm that uses geospatial data to describe relationships between seagrass depth limits, water clarity, and light requirements \scriptsize [Beck, Hagy, Le, in review]
