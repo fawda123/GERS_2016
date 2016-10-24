@@ -51,7 +51,7 @@
 \usepackage{alltt}
 \usetheme{Boadilla}
 \usepackage{graphicx}
-\usepackage[draft]{animate}
+\usepackage[final]{animate}
 \usepackage{breqn}
 \usepackage{xcolor}
 \usepackage{booktabs}
@@ -67,7 +67,7 @@
 \setbeamertemplate{navigation symbols}{}
 
 % macros
-\newcommand{\emtxt}[1]{\textbf{\textit{#1}}}
+\newcommand{\emtxt}[1]{\textbf{\textit{{\color{mypal4} #1}}}}
 
 % change font size for figure captions
 \setbeamerfont{caption}{size=\scriptsize}
@@ -127,10 +127,11 @@
 %%%%%%
 \begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
 \begin{center}
-Seagrasses are beneficial - healthy seagrass, healthy estuary \\~\\
-\centerline{\includegraphics[width = 0.7\textwidth]{fig/sg_pic.png}}
-\vspace{0.1in}
-Seagrasses are sentinels of water quality \tiny \cite{Short96}
+Seagrasses are beneficial - healthy seagrass, healthy estuary {\tiny \cite{Williams01,Hughes09}}
+\end{center}
+\centerline{\fbox{\includegraphics[width = 0.65\textwidth]{fig/sg_pic.png}}}
+\begin{center}
+Seagrasses are sentinels of water quality {\tiny \cite{Duarte95,Short96}}
 \end{center}
 \vfill
 \tiny
@@ -138,24 +139,10 @@ Seagrasses are sentinels of water quality \tiny \cite{Short96}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Research challenges and study objective}}
 \onslide<+->
-Nutrient limits using seagrass depth-limit targets \tiny \cite{Steward07}\\~\\
-\begin{columns}[T]
-\begin{column}{0.45\textwidth}
-\centerline{\includegraphics[width = 0.9\textwidth]{fig/irl_map.png}}
-\end{column}
-\begin{column}{0.45\textwidth}
-\centerline{\includegraphics[width = 0.92\textwidth]{fig/irl_reg.png}}
-\end{column}
-\end{columns}
-\end{frame}
-
-%%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-\onslide<+->
-The maximum depth of colonization is a useful proxy of eutrophication \\~\\
-Often used as a basis for establishing nutrient criteria \\~\\
+The maximum depth of colonization is a useful proxy of eutrophication {\tiny \cite{Kenworthy96,Choice14}} \\~\\
+Often used as a basis for establishing nutrient criteria {\tiny \cite{Steward07}}\\~\\
 \onslide<+->
 \emtxt{Problem 1:} No consensus on the best way to measure depth of colonization \\~\\
 \emtxt{Problem 2:} Plenty of data are available but standardized techniques have not been developed \\~\\
@@ -166,7 +153,7 @@ Develop and apply an algorithm that uses geospatial data to describe relationshi
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 \onslide<+->
 \emtxt{Existing geospatial datasets} - coastal segments, seagrass areal coverage, bathymetry
 \begin{columns}[T]
@@ -183,13 +170,13 @@ Develop and apply an algorithm that uses geospatial data to describe relationshi
 \end{knitrout}
 \end{column}
 \begin{column}{0.45\textwidth}
-\centerline{\includegraphics[width = 0.8\textwidth]{fig/Charlotte_Estuary_Segments.jpg}}
+\centerline{\fbox{\includegraphics[width = 0.8\textwidth]{fig/Charlotte_Estuary_Segments.jpg}}}
 \end{column}
 \end{columns}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 \onslide<+->
 How can we estimate depth of colonization? \\~\\
 \begin{columns}[T]
@@ -229,23 +216,23 @@ How can we estimate depth of colonization? \\~\\
 \end{columns}
 \vspace{0.15in}
 \onslide<+->
-\emtxt{4.} Match depth points with p/a of seagrass...
+\emtxt{4.} Match depth points with seagrass presence/absence...
 \end{frame}
 
 
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-Plot the distribution of seagrass by increasing depth \\~\\
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
+\emtxt{5.} Plot the distribution of seagrass by increasing depth \\~\\
 \includegraphics<1>[width = \textwidth, page = 1]{fig/doc_ex.pdf}
 \includegraphics<2>[width = \textwidth, page = 2]{fig/doc_ex.pdf}
 \includegraphics<3>[width = \textwidth, page = 3]{fig/doc_ex.pdf}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{SEstimating seagrass depth of colonization}}
 \onslide<+->
-The estimate depends on the spatial context...
+The estimate depends on the spatial context...\\~\\
 \begin{columns}[T]
 \onslide<+->
 \begin{column}{0.45\textwidth}
@@ -278,7 +265,7 @@ The estimate depends on the spatial context...
 
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 The estimate depends on the spatial context...
 \begin{center}
 \animategraphics[controls,width=\linewidth,trim = 15mm 2mm 0mm 0mm]{6}{fig/radred}{}{} %frame rate is 12 per/sec
@@ -288,16 +275,18 @@ The estimate depends on the spatial context...
 
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 The estimate depends on the spatial context...
 \begin{center}
 \animategraphics[controls,width=0.95\linewidth]{6}{fig/radred2}{}{} %frame rate is 12 per/sec
 \end{center}
 \end{frame}
 
+
+
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-The algorithm was applied to entire estuaries with relevant data \\~\\
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
+The algorithm was applied to entire estuaries with appropriate data \\~\\
 \begin{columns}
 \begin{column}{0.3\textwidth}
 \emtxt{Boundaries}
@@ -320,10 +309,19 @@ The algorithm was applied to entire estuaries with relevant data \\~\\
 \end{columns}
 \end{frame}
 
+% tb summ
 
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}[t]{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
+Tampa Bay summary: \\~\\
+\centerline{\includegraphics[width = 0.85\textwidth]{fig/tb_summ1.pdf}}
+\end{frame}
+
+
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
 \onslide<1->
 Can we link depth estimates with water clarity to understand light requirements?
 \vspace{-0.2in}
@@ -354,7 +352,7 @@ $K_d$: light extinction coefficient
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
 \onslide<1->
 Can we link depth estimates with water clarity to understand light requirements?
 \vspace{-0.2in}
@@ -384,79 +382,110 @@ Can we link depth estimates with water clarity to understand light requirements?
 \end{columns}
 \end{frame}
 
-% tb summ
-
-
-% irl summ
-
-
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-Tampa Bay summary:\\~\\
-\includegraphics[width = \textwidth]{fig/tb_summ.pdf}
-Indian River Lagoon summary: \\~\\
-\includegraphics[width = \textwidth]{fig/irl_summ.pdf}
+\begin{frame}[t]{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
+Tampa Bay summary: \\~\\
+\centerline{\includegraphics[width = 0.85\textwidth]{fig/tb_summ2.pdf}}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-\onslide<+->
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
+\scriptsize
+%latex.default(tabzc, file = "", rowlabel = "Segment", caption = cap.val,     colheads = col_heads, cgroup = c("", "$\\mathbf Z_{c,\\,med}$"),     n.cgroup = c(1, 4), caption.loc = "top", rowname = rows)%
+\begin{table}[!tbp]
+\caption{Summary of median depth of colonization ($Z_{c,\,med}$, m) for Tampa Bay and bay segments.\label{tabzc}} 
+\begin{center}
+\begin{tabular}{llcllll}
+\hline\hline
+\multicolumn{1}{l}{\bfseries Segment}&\multicolumn{1}{c}{\bfseries }&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries $\mathbf Z_{c,\,med}$}\tabularnewline
+\cline{4-7}
+\multicolumn{1}{l}{}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
+\hline
+\textbf{Tampa Bay}&218&&1.2\textsuperscript{}&0.1&0.6&1.6\tabularnewline
+\hspace{0.02in} HB&20&&1.1\textsuperscript{ab}&0.2&0.8&1.3\tabularnewline
+\hspace{0.02in} LTB&60&&1.3\textsuperscript{b}&0.1&1.1&1.5\tabularnewline
+\hspace{0.02in} MTB&74&&1.4\textsuperscript{b}&0.1&1.1&1.6\tabularnewline
+\hspace{0.02in} OTB&64&&0.8\textsuperscript{a}&0.2&0.6&1.1\tabularnewline
+\hline
+\end{tabular}\end{center}
+
+\end{table}
+%latex.default(tablt, file = "", rowlabel = "Segment", caption = cap.val,     colheads = col_heads, cgroup = c("", "{\\bf \\% light}"),     n.cgroup = c(1, 4), caption.loc = "top", rowname = rows)%
+\begin{table}[!tbp]
+\caption{Summary of light requirements (\%) for Tampa Bay and bay segments.\label{tablt}} 
+\begin{center}
+\begin{tabular}{llcllll}
+\hline\hline
+\multicolumn{1}{l}{\bfseries Segment}&\multicolumn{1}{c}{\bfseries }&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries {\bf \% light}}\tabularnewline
+\cline{4-7}
+\multicolumn{1}{l}{}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
+\hline
+\textbf{Tampa Bay}&218&&41\textsuperscript{}&2.5&13&66\tabularnewline
+\hspace{0.02in} HB&20&&34.1&11.2&12.8&55.7\tabularnewline
+\hspace{0.02in} LTB&60&&40.0& 7.5&23.8&55.5\tabularnewline
+\hspace{0.02in} MTB&74&&36.1& 7.6&17.0&57.5\tabularnewline
+\hspace{0.02in} OTB&64&&48.9& 8.7&29.9&66.0\tabularnewline
+\hline
+\end{tabular}\end{center}
+
+\end{table}
+
+\end{frame}
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Conclusions}}
+\onslide<1->
 Benefits of the approach: \\~\\
 \begin{itemize}
-\item The spatial unit for any estimate of seagrass growth limit is problem-specific \\~\\
-\item Allows for a `compliance-point' approach (saves time/money) \\~\\
-\item Increased understanding of seagrass growth patterns - natural and anthropogenic drivers \\~\\
+\onslide<1-> 
+\item Better characterization of \emtxt{spatial patterns} - 20\% light requirements may not be sufficient for all \\~\\
+\onslide<2-> 
+\item The spatial unit for any estimate of seagrass growth limit is \emtxt{problem-specific} - a `compliance-point' approach \\~\\
+\onslide<3-> 
+\item Increased understanding of seagrass growth patterns can lead to \emtxt{testable hypotheses}
 \end{itemize}
-\onslide<+->
-Lots to be done...
+\vspace{0.07in}
+\onslide<1-> 
+\centerline{\fbox{\includegraphics[width = 0.31\textwidth]{fig/sg_pic.png}}}
 \end{frame}
 
-% %%%%%%
-% \begin{frame}{\textbf{Case 2: Seagrass and water quality}}{\textbf{Making the most of existing data}}
-% Development widget online: \href{https://beckmw.shinyapps.io/sg_depth/}{https://beckmw.shinyapps.io/sg\_depth/}
-% \centerline{\includegraphics[width = 0.75\textwidth]{fig/widget.png}}
-% \end{frame}
-% 
-% %%%%%%
-% \begin{frame}
-% Acknowledgments and contact info:\\~\\
-% \begin{columns}
-% \begin{column}{0.9\textwidth}
-% {\footnotesize
-% Research staff and employees at USEPA Gulf Ecology Division, San Francisco Estuary Institute \\~\\
-% David Senn, Phil Bresnahan, Emily Novick, James D. Hagy III, Thomas Jabusch
-% }
-% \end{column}
-% \end{columns}
-% \vfill
-% \begin{columns}
-% \begin{column}{0.5\textwidth}
-% \begin{center}
-% \includegraphics[width=0.7\linewidth]{fig/titlegraphic.png}
-% \end{center}
-% \end{column}
-% \begin{column}{0.5\textwidth}
-% \scriptsize
-% \begin{center}
-% \href{mailto:beck.marcus@epa.gov}{beck.marcus@epa.gov} \\~\\
-% Github @fawda123 \\~\\
-% Phone: 8509342480
-% \end{center}
-% \end{column}
-% \end{columns}
-% \vfill
-% Links:\\~\\
-% \begin{columns}
-% \begin{column}{0.9\textwidth}
-% \scriptsize
-% This presentation: \href{https://github.com/fawda123/sfei_pres}{\url{https://github.com/fawda123/sfei\_pres}}
-% 
-% Shiny app: \href{https://beckmw.shinyapps.io/sf_trends/}{\url{https://beckmw.shinyapps.io/sf_trends/}}
-% 
-% Detailed results: \href{http://fawda123.github.io/sf_trends/README}{\url{http://fawda123.github.io/sf\_trends/README}}
-% \end{column}
-% \end{columns}
-% \end{frame}
+%%%%%%
+\begin{frame}
+\emtxt{Acknowledgments:}\\~\\
+\begin{columns}
+\begin{column}{0.55\textwidth}
+{\footnotesize
+Research staff and employees at USEPA Gulf Ecology Division \\~\\
+Field staff and data managers at Hillsborough County Environmental Protection Commission, Tampa Bay Estuary Program\\~\\
+Peter Tango for reviewing a manuscript draft
+}
+\end{column}
+\begin{column}{0.4\textwidth}
+\vspace{-0.2in}
+\begin{center}
+{\tiny
+Online app \href{https://beckmw.shinyapps.io/sg_depth/}{https://beckmw.shinyapps.io/sg\_depth/}\\~\\
+}
+\centerline{\fbox{\includegraphics[width=0.85\linewidth]{fig/app.PNG}}}
+\end{center}
+\end{column}
+\end{columns}
+\vfill
+\emtxt{Funding sources and contact:}\\~\\
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\centerline{\includegraphics[width=0.4\linewidth]{fig/epa_logo.png}}
+\end{column}
+\begin{column}{0.5\textwidth}
+\scriptsize
+\href{mailto:beck.marcus@epa.gov}{beck.marcus@epa.gov} \\~\\
+Phone: 8509342480 \\~\\
+Github: \href{https://github.com/fawda123/}{github.com/fawda123/} \\~\\
+Blog: \href{http://beckmw.wordpress.com/}{beckmw.wordpress.com/}
+\end{column}
+\end{columns}
+\vspace{0.2in}
+\end{frame}
 
 %%%%%%
 \section{References}

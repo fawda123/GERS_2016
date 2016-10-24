@@ -1,7 +1,7 @@
 \documentclass[serif]{beamer}
 \usetheme{Boadilla}
 \usepackage{graphicx}
-\usepackage[draft]{animate}
+\usepackage[final]{animate}
 \usepackage{breqn}
 \usepackage{xcolor}
 \usepackage{booktabs}
@@ -17,7 +17,7 @@
 \setbeamertemplate{navigation symbols}{}
 
 % macros
-\newcommand{\emtxt}[1]{\textbf{\textit{#1}}}
+\newcommand{\emtxt}[1]{\textbf{\textit{{\color{mypal4} #1}}}}
 
 % change font size for figure captions
 \setbeamerfont{caption}{size=\scriptsize}
@@ -64,8 +64,7 @@ library(grid)
 library(purrr)
 library(tidyr)
 library(Hmisc)
-library(ggrepel)
-library(lubridate)
+library(nlme)
 @
 
 % get online bib file
@@ -138,10 +137,11 @@ dev.off()
 %%%%%%
 \begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
 \begin{center}
-Seagrasses are beneficial - healthy seagrass, healthy estuary \\~\\
-\centerline{\includegraphics[width = 0.7\textwidth]{fig/sg_pic.png}}
-\vspace{0.1in}
-Seagrasses are sentinels of water quality \tiny \cite{Short96}
+Seagrasses are beneficial - healthy seagrass, healthy estuary {\tiny \cite{Williams01,Hughes09}}
+\end{center}
+\centerline{\fbox{\includegraphics[width = 0.65\textwidth]{fig/sg_pic.png}}}
+\begin{center}
+Seagrasses are sentinels of water quality {\tiny \cite{Duarte95,Short96}}
 \end{center}
 \vfill
 \tiny
@@ -149,24 +149,10 @@ Seagrasses are sentinels of water quality \tiny \cite{Short96}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Research challenges and study objective}}
 \onslide<+->
-Nutrient limits using seagrass depth-limit targets \tiny \cite{Steward07}\\~\\
-\begin{columns}[T]
-\begin{column}{0.45\textwidth}
-\centerline{\includegraphics[width = 0.9\textwidth]{fig/irl_map.png}}
-\end{column}
-\begin{column}{0.45\textwidth}
-\centerline{\includegraphics[width = 0.92\textwidth]{fig/irl_reg.png}}
-\end{column}
-\end{columns}
-\end{frame}
-
-%%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-\onslide<+->
-The maximum depth of colonization is a useful proxy of eutrophication \\~\\
-Often used as a basis for establishing nutrient criteria \\~\\
+The maximum depth of colonization is a useful proxy of eutrophication {\tiny \cite{Kenworthy96,Choice14}} \\~\\
+Often used as a basis for establishing nutrient criteria {\tiny \cite{Steward07}}\\~\\
 \onslide<+->
 \emtxt{Problem 1:} No consensus on the best way to measure depth of colonization \\~\\
 \emtxt{Problem 2:} Plenty of data are available but standardized techniques have not been developed \\~\\
@@ -177,7 +163,7 @@ Develop and apply an algorithm that uses geospatial data to describe relationshi
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 \onslide<+->
 \emtxt{Existing geospatial datasets} - coastal segments, seagrass areal coverage, bathymetry
 \begin{columns}[T]
@@ -193,13 +179,13 @@ title('Segment-based approach', line = 0, cex.main = 1.4)
 @
 \end{column}
 \begin{column}{0.45\textwidth}
-\centerline{\includegraphics[width = 0.8\textwidth]{fig/Charlotte_Estuary_Segments.jpg}}
+\centerline{\fbox{\includegraphics[width = 0.8\textwidth]{fig/Charlotte_Estuary_Segments.jpg}}}
 \end{column}
 \end{columns}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 \onslide<+->
 How can we estimate depth of colonization? \\~\\
 \begin{columns}[T]
@@ -241,7 +227,7 @@ points(sgpts_820_2006, col = scales::alpha(pal(5)[5], 0.5), pch =16, cex = 0.6)
 \end{columns}
 \vspace{0.15in}
 \onslide<+->
-\emtxt{4.} Match depth points with p/a of seagrass...
+\emtxt{4.} Match depth points with seagrass presence/absence...
 \end{frame}
 
 <<doc_ex, echo = F, results = 'hide', message = F, eval = T>>=
@@ -274,17 +260,17 @@ dev.off()
 @
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-Plot the distribution of seagrass by increasing depth \\~\\
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
+\emtxt{5.} Plot the distribution of seagrass by increasing depth \\~\\
 \includegraphics<1>[width = \textwidth, page = 1]{fig/doc_ex.pdf}
 \includegraphics<2>[width = \textwidth, page = 2]{fig/doc_ex.pdf}
 \includegraphics<3>[width = \textwidth, page = 3]{fig/doc_ex.pdf}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{SEstimating seagrass depth of colonization}}
 \onslide<+->
-The estimate depends on the spatial context...
+The estimate depends on the spatial context...\\~\\
 \begin{columns}[T]
 \onslide<+->
 \begin{column}{0.45\textwidth}
@@ -319,10 +305,10 @@ below <- sgpts_820_2006[sgpts_820_2006$GRID_CODE < -2.619, ]
 par(mar=c(0,0,0,0))
 sp::plot(seg_820, border = 'white')
 sp::plot(FL_cut, add = T, col = pal(5)[3])
-sp::plot(seg_820, add = T)
 points(above, col = alpha(pal(5)[5], 0.5), pch = 16, cex = 0.6)
 points(below, col = alpha('black', 0.5), pch = 21, cex = 0.6)
 sp::plot(bbend_sg_diss, add = T, col = pal(5)[2], border = NA)
+sp::plot(seg_820, add = T)
 legend('bottomleft', legend = 'Actual seagrass growth', fill = alpha(pal(5)[2]), border = alpha(pal(5)[1]))
 @
 \end{column}
@@ -391,7 +377,7 @@ dev.off()
 
 @
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 The estimate depends on the spatial context...
 \begin{center}
 \animategraphics[controls,width=\linewidth,trim = 15mm 2mm 0mm 0mm]{6}{fig/radred}{}{} %frame rate is 12 per/sec
@@ -436,7 +422,10 @@ The estimate depends on the spatial context...
 
 set.seed(1234)
 load('data/rad_ests.RData')
-est_pts <- grid_est(seg, spacing = 0.025)
+data(seg_820)
+data(FL_cut)
+
+est_pts <- grid_est(seg_820, spacing = 0.025)
 
 # get colors for plotting
 col_ests <- do.call('c', rad_ests)
@@ -484,16 +473,27 @@ dev.off()
 @
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
 The estimate depends on the spatial context...
 \begin{center}
 \animategraphics[controls,width=0.95\linewidth]{6}{fig/radred2}{}{} %frame rate is 12 per/sec
 \end{center}
 \end{frame}
 
+<<echo = F, message = F, results = 'hide'>>=
+data(tb_seg)
+tmp <- grid_est(tb_seg, spacing = 0.015)
+
+pdf('fig/tb_seg.pdf', family = 'serif', height = 6.5, width = 4.5)
+par(mar = numeric(4))
+sp::plot(tb_seg)
+points(tmp, cex = 0.8)
+dev.off()
+@
+
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-The algorithm was applied to entire estuaries with relevant data \\~\\
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Estimating seagrass depth of colonization}}
+The algorithm was applied to entire estuaries with appropriate data \\~\\
 \begin{columns}
 \begin{column}{0.3\textwidth}
 \emtxt{Boundaries}
@@ -514,6 +514,139 @@ The algorithm was applied to entire estuaries with relevant data \\~\\
 \end{center}
 \end{column}
 \end{columns}
+\end{frame}
+
+% tb summ
+<<eval = T, echo = F, cache = T, message = F, results = 'hide'>>=
+data(tb_light)
+data(tb_seg)
+data(sgbuff_2010_tb)
+
+# mask tb doc and light ests by 1km buffer of seagrass
+coordinates(tb_light) = ~Longitude+Latitude
+tmp <- tb_light  %over% sgbuff_2010_tb %>% 
+  is.na(.) %>% 
+  !.
+tb_light <- data.frame(tb_light)[tmp, ]
+
+# centroids for labels
+labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
+labs$seg <- c('HB', 'LTB', 'MTB', 'OTB')
+
+mytheme <- theme_bw() + 
+  theme(
+    plot.background = element_rect(fill='transparent', 
+      colour = NA),
+    panel.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.background = element_rect(fill='transparent', 
+      colour = NA),
+    legend.key = element_rect(fill = 'transparent', 
+      colour = NA),
+    axis.ticks.length = unit(.1, "cm"), 
+    plot.margin = unit(c(1, 1, 1, 1), 'pt'), 
+    legend.position = 'right'
+  )   
+
+# format data, remove outliers
+dat <- data.frame(tb_light)
+
+# color ramp for all graphs
+pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
+fill_col <- pal(5)[3]
+
+# legend formatting, z_cmed
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat$z_c_all, to = scls)
+leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+
+# map, z_cmed
+p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = z_c_all), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  xlab('') +
+  scale_y_continuous(labels = fmt()) + 
+  ylab('') +
+  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, 
+    breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
+    colours = rev(pt_cols),
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend()) +
+  mytheme
+
+# boxplots by seg, z_cmed
+# reorder seg labels
+segs <- c('LTB', 'MTB', 'HB', 'OTB')
+dat$seg <- factor(dat$seg, levels = segs) 
+p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") + 
+  ylab(bquote(italic('Z' ['c, med']))) +
+  coord_flip() + 
+  mytheme +
+  theme(
+    axis.title.y = element_blank()
+    )
+# legend formatting, light requirements
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat$light, to = scls)
+leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+  
+# map, light requirements
+p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = light), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  xlab('') +
+  scale_y_continuous(labels = fmt()) + 
+  ylab('') +
+  scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = '% SI', 
+    colours = pt_cols,
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend()) +
+  mytheme
+
+# boxplots, light requirements
+p4 <- ggplot(dat, aes(x = seg, y = light)) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
+  ylab('% SI') +
+  coord_flip() + 
+  mytheme +
+  theme(
+    axis.title.y = element_blank()
+    )
+
+pdf('fig/tb_summ1.pdf', height = 5, width = 8, family = 'serif')
+grid.arrange(p1, p2, ncol = 2, nrow = 1, 
+  widths = c(1, 0.45))
+dev.off()
+
+pdf('fig/tb_summ2.pdf', height = 5, width = 8, family = 'serif')
+grid.arrange(p3, p4, ncol = 2, nrow = 1, 
+  widths = c(1, 0.45))
+dev.off()
+@
+
+%%%%%%
+\begin{frame}[t]{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
+Tampa Bay summary: \\~\\
+\centerline{\includegraphics[width = 0.85\textwidth]{fig/tb_summ1.pdf}}
 \end{frame}
 
 <<eval = T, echo = F, cache = T, message = F, results = 'hide'>>=
@@ -659,7 +792,7 @@ dev.off()
 @
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
 \onslide<1->
 Can we link depth estimates with water clarity to understand light requirements?
 \vspace{-0.2in}
@@ -690,7 +823,7 @@ $K_d$: light extinction coefficient
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
 \onslide<1->
 Can we link depth estimates with water clarity to understand light requirements?
 \vspace{-0.2in}
@@ -720,310 +853,217 @@ Can we link depth estimates with water clarity to understand light requirements?
 \end{columns}
 \end{frame}
 
-% tb summ
-<<eval = T, echo = F, cache = T, message = F, results = 'hide'>>=
-data(tb_light)
-data(tb_seg)
-data(sgbuff_2010_tb)
-
-# mask tb doc and light ests by 1km buffer of seagrass
-coordinates(tb_light) = ~Longitude+Latitude
-tmp <- tb_light  %over% sgbuff_2010_tb %>% 
-  is.na(.) %>% 
-  !.
-tb_light <- data.frame(tb_light)[tmp, ]
-
-# centroids for labels
-labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
-labs$seg <- c('HB', 'LTB', 'MTB', 'OTB')
-
-mytheme <- theme_bw() + 
-  theme(
-    plot.background = element_rect(fill='transparent', 
-      colour = NA),
-    panel.background = element_rect(fill='transparent', 
-      colour = NA),
-    legend.background = element_rect(fill='transparent', 
-      colour = NA),
-    legend.key = element_rect(fill = 'transparent', 
-      colour = NA),
-    axis.ticks.length = unit(.1, "cm"), 
-    plot.margin = unit(c(1, 1, 1, 1), 'pt'), 
-    legend.position = 'right'
-  )   
-
-# format data, remove outliers
-dat <- data.frame(tb_light)
-
-# color ramp for all graphs
-pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
-fill_col <- pal(5)[3]
-
-# legend formatting, z_cmed
-scls <- c(2, 9)
-scl_vals <- scales::rescale(dat$z_c_all, to = scls)
-leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
-leg_labs <- form_fun(leg_brks, 2, 2, 2)
-
-# map, z_cmed
-p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = z_c_all), fill = 'black', alpha = 0.8) +
-  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
-  coord_equal() +
-  scale_x_continuous(labels = fmt()) + 
-  xlab('') +
-  scale_y_continuous(labels = fmt()) + 
-  ylab('') +
-  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, 
-    breaks = leg_brks, 
-    labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
-    colours = rev(pt_cols),
-    breaks = leg_brks, labels = leg_labs) +
-  guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend()) +
-  mytheme
-
-# boxplots by seg, z_cmed
-# reorder seg labels
-segs <- c('LTB', 'MTB', 'HB', 'OTB')
-dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
-  stat_summary(fun.y = o, geom = "point") + 
-  ylab(bquote(italic('Z' ['c, med']))) +
-  coord_flip() + 
-  mytheme +
-  theme(
-    axis.title.y = element_blank()
-    )
-# legend formatting, light requirements
-scls <- c(2, 9)
-scl_vals <- scales::rescale(dat$light, to = scls)
-leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
-leg_labs <- form_fun(leg_brks, 2, 2, 2)
-  
-# map, light requirements
-p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = light), fill = 'black', alpha = 0.8) +
-  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
-  coord_equal() +
-  scale_x_continuous(labels = fmt()) + 
-  xlab('') +
-  scale_y_continuous(labels = fmt()) + 
-  ylab('') +
-  scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
-    labels = leg_labs) + 
-  scale_colour_gradientn(name = '% SI', 
-    colours = pt_cols,
-    breaks = leg_brks, labels = leg_labs) +
-  guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend()) +
-  mytheme
-
-# boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
-  stat_summary(fun.y = o, geom = "point") +
-  ylab('% SI') +
-  coord_flip() + 
-  mytheme +
-  theme(
-    axis.title.y = element_blank()
-    )
-
-pdf('fig/tb_summ.pdf', height = 5, width = 13, family = 'serif')
-grid.arrange(p1, p2, p3, p4, ncol = 4, nrow = 1, 
-  widths = c(1, 0.35, 1, 0.35))
-dev.off()
-@
-
-% irl summ
-<<eval = T, echo = F, cache = T, message = F, results = 'hide'>>=
-data(irl_light)
-data(irl_seg)
-
-# centroids for labels, offset
-labs <- data.frame(rgeos::gCentroid(irl_seg, byid = T, id = irl_seg$seg))
-labs$x <- labs$x - 0.3
-labs$seg <- rownames(labs)
-labs <- labs[!labs$seg %in% c('LSL', 'LHR'), ]
-
-# format data, remove outliers
-dat <- data.frame(irl_light)
-
-# color ramp for all graphs
-pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
-fill_col <- pal(5)[3]
-
-# legend formatting, z_cmed
-scls <- c(2, 9)
-scl_vals <- scales::rescale(dat$z_c_all, to = scls)
-leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
-leg_labs <- form_fun(leg_brks, 2, 2, 2)
-
-mytheme <- theme_bw() + 
-  theme(
-    plot.background = element_rect(fill='transparent', 
-      colour = NA),
-    panel.background = element_rect(fill='transparent', 
-      colour = NA),
-    legend.background = element_rect(fill='transparent', 
-      colour = NA),
-    legend.key = element_rect(fill = 'transparent', 
-      colour = NA),
-    axis.ticks.length = unit(.1, "cm"), 
-    plot.margin = unit(c(1, 1, 1, 1), 'pt'), 
-    legend.position = 'right'
-  )   
-
-# map, z_cmed
-p1 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = z_c_all), size = 3, fill = 'black', alpha = 0.8) +
-  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
-  coord_equal() +
-  scale_x_continuous(limits = c(-81.3, -80)) + 
-  xlab('') +
-  scale_y_continuous() + 
-  ylab('') +
-  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, breaks = leg_brks, 
-    labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
-    colours = rev(pt_cols),
-    breaks = leg_brks, labels = leg_labs) +
-  guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend()) +
-  mytheme
-
-# boxplots by seg, z_cmed
-# reorder seg labels
-segs <- c('LSL', 'LIRL', 'LCIRL', 'UCIRL', 'BR', 'UIRL', 'LML', 'UML')
-dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
-  stat_summary(fun.y = o, geom = "point") + 
-  ylab(bquote(italic('Z' ['c, med']))) +
-  coord_flip() +
-  mytheme + 
-  theme(axis.title.y = element_blank())
-  
-# legend formatting, light requirements
-scls <- c(2, 9)
-scl_vals <- scales::rescale(dat$light, to = scls)
-leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
-leg_labs <- form_fun(leg_brks, 2, 2, 2)
-  
-# map, light requirements
-p3 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = NA, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = light), size = 3, fill = 'black', alpha = 0.8) +
-  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
-  coord_equal() +
-  scale_x_continuous(limits = c(-81.3, -80)) + 
-  xlab('') +
-  scale_y_continuous() + 
-  ylab('') +
-  scale_size(name = '% SI', range = scls, breaks = leg_brks, 
-    labels = leg_labs) + 
-  scale_colour_gradientn(name = '% SI', 
-    colours = pt_cols,
-    breaks = leg_brks, 
-    labels = leg_labs
-    ) +
-  guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend()) + 
-  mytheme
-
-# boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
-  stat_summary(fun.y = o, geom = "point") +
-  ylab('% SI') +
-  coord_flip() + 
-  mytheme + 
-  theme(axis.title.y = element_blank())
-  
-
-pdf('fig/irl_summ.pdf', height = 4, width = 10, family = 'serif')
-grid.arrange(p1, p2, p3, p4, ncol = 4, nrow = 1, 
-  widths = c(1, 0.45, 1, 0.45))
-dev.off()
-@
-
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-Tampa Bay summary:\\~\\
-\includegraphics[width = \textwidth]{fig/tb_summ.pdf}
-Indian River Lagoon summary: \\~\\
-\includegraphics[width = \textwidth]{fig/irl_summ.pdf}
+\begin{frame}[t]{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
+Tampa Bay summary: \\~\\
+\centerline{\includegraphics[width = 0.85\textwidth]{fig/tb_summ2.pdf}}
 \end{frame}
 
 %%%%%%
-\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Seagrasses and water quality}}
-\onslide<+->
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Linking estimates to light requirements}}
+\scriptsize
+<<echo = F, results = 'asis', eval = T>>=
+# ##
+# # load data
+# 
+# # load results from figure chunks
+# data(tb_light)
+# data(irl_light)
+# data(choc_light)
+# 
+# ##
+# # prep data
+# 
+# # add bay column, select relevant columns
+# choc_light <- mutate(choc_light, bay = 'Choctawhatchee Bay') %>% 
+#   select(bay, seg, z_c_all, light)
+# irl_light <- mutate(irl_light, bay = 'Indian River Lagoon')%>% 
+#   select(bay, seg, z_c_all, light)
+# tb_light <- mutate(tb_light, bay = 'Tampa Bay')%>% 
+#   select(bay, seg, z_c_all, light)
+# 
+# # summarize
+# all_light <- rbind(choc_light, irl_light, tb_light) %>% 
+#   group_by(bay, seg) %>% 
+#   summarize(
+#     n_locs = length(seg), 
+#     mean_z_cmed = mean(z_c_all), 
+#     sd_z_cmed = sd(z_c_all),
+#     min_z_cmed = min(z_c_all),
+#     max_z_cmed = max(z_c_all),
+#     mean_light = mean(light),
+#     sd_light = sd(light),
+#     min_light = min(light),
+#     max_light = max(light)
+#     )
+# 
+# # means need to be from mixed models
+# data(tb_light)
+# data(choc_light)
+# data(irl_light)
+# 
+# tb_light$seg <- factor(tb_light$seg)
+# choc_light$seg <- factor(choc_light$seg)
+# irl_light$seg <- factor(irl_light$seg)
+# 
+# zc1 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+#   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+#   data = tb_light)
+# zc2 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+#   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+#   data = choc_light)
+# zc3 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+#   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+#   data =irl_light)
+# 
+# lm1 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+#   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+#   data = tb_light)
+# lm2 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+#   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+#   data = choc_light)
+# lm3 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+#   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+#   data =irl_light)
+# 
+# avezc <- lapply(list(zc2, zc3, zc1), function(x) x$coefficients$fixed) %>% 
+#   unlist
+# avelight <- lapply(list(lm2, lm3, lm1), function(x) x$coefficients$fixed) %>% 
+#   unlist 
+# 
+# all_light$mean_z_cmed <- avezc
+# all_light$mean_light <- avelight
+# 
+# save(all_light, file = 'data/all_light.RData')
+
+# load data
+data(all_light)
+
+# prep for table
+tab <- data.frame(all_light)
+# tab <- tab[, !grepl('_light$', names(tab))]
+rows <- tab[, 2]
+tab <- tab[, -c(1:2)]
+tab[, 2:9] <- formtab_fun(tab[, 2:9], 1, 1, 1)
+nms <- names(tab)
+ncoltab <- ncol(tab)
+nrowtab <- nrow(tab)
+tab <- unlist(tab)
+tab[grepl('NaN$', tab)] <-  ' '
+tab <- matrix(tab, nrow = nrowtab, ncol = ncoltab)
+tab <- data.frame(tab)
+names(tab) <- nms
+
+# add sig letters to mean_z_cmed from gls comparisons
+avals <- c(2, 4:10, 14)
+bvals <- c(1, 3, 12, 13)
+abvals <- c(11)
+tab$mean_z_cmed <- as.character(tab$mean_z_cmed)
+tab$mean_z_cmed[avals] <- paste0(tab$mean_z_cmed[avals], '\\textsuperscript{a}')
+tab$mean_z_cmed[bvals] <- paste0(tab$mean_z_cmed[bvals], '\\textsuperscript{b}')
+tab$mean_z_cmed[abvals] <- paste0(tab$mean_z_cmed[abvals], '\\textsuperscript{ab}')
+
+# add rows for overall means
+choc <- c('255' , '2\\textsuperscript{1}', '0.1', '0.6', '2.8', '50\\textsuperscript{1}', '3.0', '20', '87')
+irl <- c('45', '1.1\\textsuperscript{2}', '0.1', '0.8', '1.6', '18\\textsuperscript{2}', '2.9', '7.5', '31')
+# tb <- c('218', '1.2\\textsuperscript{2}', '0.1', '0.6', '1.6', '41\\textsuperscript{1}', '2.5', '13', '66')
+tb <- c('218', '1.2\\textsuperscript{}', '0.1', '0.6', '1.6', '41\\textsuperscript{}', '2.5', '13', '66')
+tab <- as.matrix(tab)
+tab <- rbind(choc, tab[1:3, ], irl, tab[4:10, ], tb, tab[11:14, ])
+rows <- paste('\\hspace{0.02in}', rows)
+rows <- c('\\textbf{Choctawhatchee}', rows[1:3], '\\textbf{Indian River}', rows[4:10], '\\textbf{Tampa Bay}', rows[11:14])
+
+# tb only, zc
+tabzc <- tab[13:17, 1:5]
+tablt <- tab[13:17, c(1, 6:9)]
+rows <- rows[13:17]
+
+cap.val<-'Summary of median depth of colonization ($Z_{c,\\,med}$, m) for Tampa Bay and bay segments.'
+
+col_heads <- c('$n$', rep(c('Mean', 'St. Err.', 'Min', 'Max'), 1))
+
+latex( 
+  tabzc,
+  file = '',
+  rowlabel = 'Segment',
+  caption = cap.val,
+  colheads = col_heads,
+  cgroup = c('', '$\\mathbf Z_{c,\\,med}$'), 
+  n.cgroup = c(1, 4),
+  caption.loc = 'top',
+  rowname = rows
+  )
+
+cap.val<-'Summary of light requirements (\\%) for Tampa Bay and bay segments.'
+
+latex( 
+  tablt,
+  file = '',
+  rowlabel = 'Segment',
+  caption = cap.val,
+  colheads = col_heads,
+  cgroup = c('', '{\\bf \\% light}'), 
+  n.cgroup = c(1, 4),
+  caption.loc = 'top',
+  rowname = rows
+  )
+@
+\end{frame}
+
+%%%%%%
+\begin{frame}{$\vcenter{\hbox{\includegraphics[width=0.05\paperwidth]{fig/epa_logo.png}}}$\hspace{0.07in}\textbf{Conclusions}}
+\onslide<1->
 Benefits of the approach: \\~\\
 \begin{itemize}
-\item The spatial unit for any estimate of seagrass growth limit is problem-specific \\~\\
-\item Allows for a `compliance-point' approach (saves time/money) \\~\\
-\item Increased understanding of seagrass growth patterns - natural and anthropogenic drivers \\~\\
+\onslide<1-> 
+\item Better characterization of \emtxt{spatial patterns} - 20\% light requirements may not be sufficient for all \\~\\
+\onslide<2-> 
+\item The spatial unit for any estimate of seagrass growth limit is \emtxt{problem-specific} - a `compliance-point' approach \\~\\
+\onslide<3-> 
+\item Increased understanding of seagrass growth patterns can lead to \emtxt{testable hypotheses}
 \end{itemize}
-\onslide<+->
-Lots to be done...
+\vspace{0.07in}
+\onslide<1-> 
+\centerline{\fbox{\includegraphics[width = 0.31\textwidth]{fig/sg_pic.png}}}
 \end{frame}
 
-% %%%%%%
-% \begin{frame}{\textbf{Case 2: Seagrass and water quality}}{\textbf{Making the most of existing data}}
-% Development widget online: \href{https://beckmw.shinyapps.io/sg_depth/}{https://beckmw.shinyapps.io/sg\_depth/}
-% \centerline{\includegraphics[width = 0.75\textwidth]{fig/widget.png}}
-% \end{frame}
-% 
-% %%%%%%
-% \begin{frame}
-% Acknowledgments and contact info:\\~\\
-% \begin{columns}
-% \begin{column}{0.9\textwidth}
-% {\footnotesize
-% Research staff and employees at USEPA Gulf Ecology Division, San Francisco Estuary Institute \\~\\
-% David Senn, Phil Bresnahan, Emily Novick, James D. Hagy III, Thomas Jabusch
-% }
-% \end{column}
-% \end{columns}
-% \vfill
-% \begin{columns}
-% \begin{column}{0.5\textwidth}
-% \begin{center}
-% \includegraphics[width=0.7\linewidth]{fig/titlegraphic.png}
-% \end{center}
-% \end{column}
-% \begin{column}{0.5\textwidth}
-% \scriptsize
-% \begin{center}
-% \href{mailto:beck.marcus@epa.gov}{beck.marcus@epa.gov} \\~\\
-% Github @fawda123 \\~\\
-% Phone: 8509342480
-% \end{center}
-% \end{column}
-% \end{columns}
-% \vfill
-% Links:\\~\\
-% \begin{columns}
-% \begin{column}{0.9\textwidth}
-% \scriptsize
-% This presentation: \href{https://github.com/fawda123/sfei_pres}{\url{https://github.com/fawda123/sfei\_pres}}
-% 
-% Shiny app: \href{https://beckmw.shinyapps.io/sf_trends/}{\url{https://beckmw.shinyapps.io/sf_trends/}}
-% 
-% Detailed results: \href{http://fawda123.github.io/sf_trends/README}{\url{http://fawda123.github.io/sf\_trends/README}}
-% \end{column}
-% \end{columns}
-% \end{frame}
+%%%%%%
+\begin{frame}
+\emtxt{Acknowledgments:}\\~\\
+\begin{columns}
+\begin{column}{0.55\textwidth}
+{\footnotesize
+Research staff and employees at USEPA Gulf Ecology Division \\~\\
+Field staff and data managers at Hillsborough County Environmental Protection Commission, Tampa Bay Estuary Program\\~\\
+Peter Tango for reviewing a manuscript draft
+}
+\end{column}
+\begin{column}{0.4\textwidth}
+\vspace{-0.2in}
+\begin{center}
+{\tiny
+Online app \href{https://beckmw.shinyapps.io/sg_depth/}{https://beckmw.shinyapps.io/sg\_depth/}\\~\\
+}
+\centerline{\fbox{\includegraphics[width=0.85\linewidth]{fig/app.PNG}}}
+\end{center}
+\end{column}
+\end{columns}
+\vfill
+\emtxt{Funding sources and contact:}\\~\\
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\centerline{\includegraphics[width=0.4\linewidth]{fig/epa_logo.png}}
+\end{column}
+\begin{column}{0.5\textwidth}
+\scriptsize
+\href{mailto:beck.marcus@epa.gov}{beck.marcus@epa.gov} \\~\\
+Phone: 8509342480 \\~\\
+Github: \href{https://github.com/fawda123/}{github.com/fawda123/} \\~\\
+Blog: \href{http://beckmw.wordpress.com/}{beckmw.wordpress.com/}
+\end{column}
+\end{columns}
+\vspace{0.2in}
+\end{frame}
 
 %%%%%%
 \section{References}
